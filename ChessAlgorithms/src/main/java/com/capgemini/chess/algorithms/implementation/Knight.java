@@ -6,10 +6,12 @@ import java.util.List;
 import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.generated.Board;
+import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 
-public class Knight {
+public class Knight implements PiecesMove {
 
-	public void checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) {
+	public boolean checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo)
+			throws InvalidMoveException {
 
 		int coordinateFromX = coordinateFrom.getX();
 		int coordinateFromY = coordinateFrom.getY();
@@ -19,9 +21,9 @@ public class Knight {
 
 		if (((Math.abs(coordinateFromX - coordinateToX) == 1) && (Math.abs(coordinateFromY - coordinateToY) == 2))
 				|| ((Math.abs(coordinateFromX - coordinateToX) == 2)
-						&& (Math.abs(coordinateFromY - coordinateToY) == 1))) {
-			listMoveKnight.add(coordinateTo);
-		}
+						&& (Math.abs(coordinateFromY - coordinateToY) == 1)))
+			return true;
+		return false;
 	}
 
 }

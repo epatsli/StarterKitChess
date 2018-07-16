@@ -18,7 +18,6 @@ public class Queen implements PiecesMove {
 		int coordinateFromY = coordinateFrom.getY();
 		int coordinateToX = coordinateTo.getX();
 		int coordinateToY = coordinateTo.getY();
-		List<Coordinate> listMoveBishop = new ArrayList<>();
 
 		if (((Math.abs(coordinateToX - coordinateFromX) == Math.abs(coordinateToY - coordinateFromY))
 				&& checkFieldBetweenFromAndToBishop(board, coordinateFrom, coordinateTo))

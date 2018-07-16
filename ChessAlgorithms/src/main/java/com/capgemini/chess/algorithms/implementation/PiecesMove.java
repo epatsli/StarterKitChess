@@ -10,7 +10,7 @@ import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveExcep
 
 public interface PiecesMove {
 
-	public void checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) throws InvalidMoveException;
+	public boolean checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) throws InvalidMoveException;
 
 	default List<Coordinate> chessboardStatus(int[][] numberMoveOnChessboard) {
 		

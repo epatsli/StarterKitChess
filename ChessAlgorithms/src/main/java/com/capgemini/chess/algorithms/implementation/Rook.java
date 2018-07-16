@@ -12,7 +12,7 @@ import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveExcep
 public class Rook implements PiecesMove{
 
 	// @Override
-	public void checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) throws InvalidMoveException {
+	public boolean checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) throws InvalidMoveException {
 
 		int coordinateFromX = coordinateFrom.getX();
 		int coordinateFromY = coordinateFrom.getY();
@@ -23,7 +23,8 @@ public class Rook implements PiecesMove{
 		List<Coordinate> listMoveRook = new ArrayList<>();
 
 		if (((coordinateFromX == coordinateToX) || (coordinateFromY == coordinateToY))&&(checkFieldBetweenFromAndTo(board, coordinateFrom, coordinateTo)))
-			listMoveRook.add(coordinateTo);
+			return true;
+		return false;
 	}
 	
 	private boolean checkFieldBetweenFromAndTo(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) throws InvalidMoveException {

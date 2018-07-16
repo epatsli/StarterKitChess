@@ -5,10 +5,12 @@ import java.util.List;
 
 import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.generated.Board;
+import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 
-public class King implements PiecesMove{
-	
-	public void checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) {
+public class King implements PiecesMove {
+
+	public boolean checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo)
+			throws InvalidMoveException {
 
 		int coordinateFromX = coordinateFrom.getX();
 		int coordinateFromY = coordinateFrom.getY();
@@ -20,10 +22,9 @@ public class King implements PiecesMove{
 				|| ((Math.abs(coordinateFromY - coordinateToY) == 1))
 						&& (Math.abs(coordinateFromX - coordinateToX) == 0))
 				|| ((Math.abs(coordinateFromX - coordinateToX) == 1)
-						&& (Math.abs(coordinateFromY - coordinateToY) == 1))) {
-			listMoveKing.add(coordinateTo);
-			
-			//dodac skok o 2
-		}
+						&& (Math.abs(coordinateFromY - coordinateToY) == 1)))
+			return true;
+		return false;
 	}
+	// dodac skok o 2
 }
