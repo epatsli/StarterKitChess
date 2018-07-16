@@ -23,6 +23,7 @@ import com.capgemini.chess.algorithms.implementation.exceptions.KingInCheckExcep
 public class BoardManager {
 
 	private Board board = new Board();
+	int[][] numberMoveOnChessboard = new int[Board.SIZE][Board.SIZE];// my
 
 	public BoardManager() {
 		initBoard();
@@ -65,6 +66,8 @@ public class BoardManager {
 		Move move = validateMove(from, to);
 
 		addMove(move);
+		
+		changeNumberMadeMove(from, to);// my
 
 		return move;
 	}
@@ -232,8 +235,12 @@ public class BoardManager {
 	}
 
 	private Move validateMove(Coordinate from, Coordinate to) throws InvalidMoveException, KingInCheckException {
-
+		
+		CheckData check=new CheckData();
+		BoardManager boardManager=new BoardManager();
+		check.checkAllWarning(board, boardManager, from, to);
 		// TODO please add implementation here
+
 		return null;
 	}
 
@@ -250,7 +257,7 @@ public class BoardManager {
 		return false;
 	}
 
-	private Color calculateNextMoveColor() {
+	public Color calculateNextMoveColor() {// change with private
 		if (this.board.getMoveHistory().size() % 2 == 0) {
 			return Color.WHITE;
 		} else {
@@ -270,6 +277,38 @@ public class BoardManager {
 		}
 
 		return lastNonAttackMoveIndex;
+	}
+
+	public int[][] numberMadeMove()// my
+	{
+		int size = Board.SIZE;
+
+		for (int row = 0; row < size; row++)
+			for (int column = 0; column < size; column++)
+				this.numberMoveOnChessboard[row][column] = 0;
+		for (int row = 2; row < size - 2; row++)
+			for (int column = 0; column < size; column++)
+				this.numberMoveOnChessboard[row][column] = -1;
+
+		return numberMoveOnChessboard;
+	}
+
+	public void changeNumberMadeMove(Coordinate coordinateFrom, Coordinate coordinateTo)// my
+	{
+		int coordinateFromX = Math.abs(Board.SIZE - 1 - coordinateFrom.getX());
+		int coordinateFromY = coordinateFrom.getY();
+		int coordinateToX = Math.abs(Board.SIZE - 1 - coordinateTo.getX());
+		int coordinateToY = coordinateTo.getY();
+
+		int currentNumberMove = this.numberMoveOnChessboard[coordinateFromX][coordinateFromY];
+		this.numberMoveOnChessboard[coordinateToX][coordinateToY] = currentNumberMove + 1;
+		this.numberMoveOnChessboard[coordinateFromX][coordinateFromY] = -1;
+
+		for (int row = 0; row < Board.SIZE; row++) {
+			for (int column = 0; column < Board.SIZE; column++)
+				System.out.print(this.numberMoveOnChessboard[row][column] + " ");
+			System.out.println();
+		}
 	}
 
 }
