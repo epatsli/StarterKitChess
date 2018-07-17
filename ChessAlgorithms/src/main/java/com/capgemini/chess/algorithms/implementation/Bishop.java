@@ -19,7 +19,8 @@ public class Bishop implements PiecesMove {
 		List<Coordinate> listMoveBishop = new ArrayList<>();
 
 		if ((Math.abs(coordinateToX - coordinateFromX) == Math.abs(coordinateToY - coordinateFromY))
-				&& checkFieldBetweenFromAndTo(board, coordinateFrom, coordinateTo))
+				&& checkFieldBetweenFromAndTo(board, coordinateFrom, coordinateTo)&& ((checkFieldToisEmpty(board, coordinateTo))
+						|| (checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo))))
 			return true;
 		return false;
 	}
@@ -39,7 +40,7 @@ public class Bishop implements PiecesMove {
 		Coordinate coordinateBetweenXY;
 
 		if ((coordinateFromY > coordinateToY) && (coordinateFromX > coordinateToX)) {
-			for (int i = 1; i < differentCoordinateY; i++) {
+			for (int i = 1; i <= differentCoordinateY; i++) {
 
 				coordinateBetweenXY = new Coordinate(coordinateFromX - i, coordinateFromY - i);
 				pieceBetween = board.getPieceAt(coordinateBetweenXY);
@@ -50,7 +51,7 @@ public class Bishop implements PiecesMove {
 					throw new InvalidMoveException();
 			}
 		} else if ((coordinateFromY < coordinateToY) && (coordinateFromX < coordinateToX)) {
-			for (int i = 1; i < differentCoordinateY; i++) {
+			for (int i = 1; i <= differentCoordinateY; i++) {
 				coordinateBetweenXY = new Coordinate(coordinateFromX + i, coordinateFromY + i);
 				pieceBetween = board.getPieceAt(coordinateBetweenXY);
 				if (pieceBetween == null)
@@ -59,7 +60,7 @@ public class Bishop implements PiecesMove {
 					throw new InvalidMoveException();
 			}
 		} else if ((coordinateFromY > coordinateToY) && (coordinateFromX < coordinateToX)) {
-			for (int i = 1; i < differentCoordinateY; i++) {
+			for (int i = 1; i <= differentCoordinateY; i++) {
 				coordinateBetweenXY = new Coordinate(coordinateFromX + i, coordinateFromY - i);
 				pieceBetween = board.getPieceAt(coordinateBetweenXY);
 				if (pieceBetween == null)
@@ -68,7 +69,7 @@ public class Bishop implements PiecesMove {
 					throw new InvalidMoveException();
 			}
 		} else if ((coordinateFromY < coordinateToY) && (coordinateFromX > coordinateToX)) {
-			for (int i = 1; i < differentCoordinateY; i++) {
+			for (int i = 1; i <= differentCoordinateY; i++) {
 				coordinateBetweenXY = new Coordinate(coordinateFromX - i, coordinateFromY + i);
 				pieceBetween = board.getPieceAt(coordinateBetweenXY);
 				if (pieceBetween == null)
@@ -77,6 +78,26 @@ public class Bishop implements PiecesMove {
 					throw new InvalidMoveException();
 			}
 		}
+		return false;
+	}
+	
+	private boolean checkEqualColorPlayerFromAndTo(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) {
+
+		Piece piece1 = board.getPieceAt(coordinateFrom);
+		Piece piece2 = board.getPieceAt(coordinateTo);
+
+		if ((piece1.getColor()) != (piece2.getColor()))
+			return true;
+
+		return false;
+	}
+
+	private boolean checkFieldToisEmpty(Board board, Coordinate coordinateTo) {
+
+		Piece piece = board.getPieceAt(coordinateTo);
+		if (piece == null)
+			return true;
+
 		return false;
 	}
 }
