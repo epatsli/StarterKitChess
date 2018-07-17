@@ -55,38 +55,41 @@ public class Rook implements PiecesMove {
 					coordinateBetweenY = new Coordinate(coordinateFromX, coordinateFromY - i);
 					pieceBetween = board.getPieceAt(coordinateBetweenY);
 					if (pieceBetween == null)
-						return true;
+						;
 					else
 						throw new InvalidMoveException();
-
 				}
+				return true;
 			} else if ((coordinateToY > coordinateFromY) && (coordinateFromX == coordinateToX)) {
 				for (int i = 1; i < differentCoordinateY; i++) {
 					coordinateBetweenY = new Coordinate(coordinateFromX, coordinateFromY + i);
 					pieceBetween = board.getPieceAt(coordinateBetweenY);
 					if (pieceBetween == null)
-						return true;
+						;
 					else
 						throw new InvalidMoveException();
 				}
+				return true;
 			} else if ((coordinateFromX > coordinateToX) && (coordinateFromY == coordinateToY)) {
 				for (int i = 1; i < differentCoordinateX; i++) {
 					coordinateBetweenX = new Coordinate(coordinateFromX - i, coordinateFromY);
 					pieceBetween = board.getPieceAt(coordinateBetweenX);
 					if (pieceBetween == null)
-						return true;
+						;
 					else
 						throw new InvalidMoveException();
 				}
+				return true;
 			} else if ((coordinateToX > coordinateFromX) && (coordinateFromY == coordinateToY)) {
 				for (int i = 1; i < differentCoordinateX; i++) {
 					coordinateBetweenX = new Coordinate(coordinateFromX + i, coordinateFromY);
 					pieceBetween = board.getPieceAt(coordinateBetweenX);
 					if (pieceBetween == null)
-						return true;
+						;
 					else
 						throw new InvalidMoveException();
 				}
+				return true;
 			}
 		}
 		return false;

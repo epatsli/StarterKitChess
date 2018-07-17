@@ -46,37 +46,41 @@ public class Bishop implements PiecesMove {
 				pieceBetween = board.getPieceAt(coordinateBetweenXY);
 
 				if (pieceBetween == null)
-					return true;
+					;
 				else
 					throw new InvalidMoveException();
 			}
+			return true;
 		} else if ((coordinateFromY < coordinateToY) && (coordinateFromX < coordinateToX)) {
 			for (int i = 1; i <= differentCoordinateY; i++) {
 				coordinateBetweenXY = new Coordinate(coordinateFromX + i, coordinateFromY + i);
 				pieceBetween = board.getPieceAt(coordinateBetweenXY);
 				if (pieceBetween == null)
-					return true;
+					;
 				else
 					throw new InvalidMoveException();
 			}
+			return true;
 		} else if ((coordinateFromY > coordinateToY) && (coordinateFromX < coordinateToX)) {
 			for (int i = 1; i <= differentCoordinateY; i++) {
 				coordinateBetweenXY = new Coordinate(coordinateFromX + i, coordinateFromY - i);
 				pieceBetween = board.getPieceAt(coordinateBetweenXY);
 				if (pieceBetween == null)
-					return true;
+					;
 				else
 					throw new InvalidMoveException();
 			}
+			return true;
 		} else if ((coordinateFromY < coordinateToY) && (coordinateFromX > coordinateToX)) {
 			for (int i = 1; i <= differentCoordinateY; i++) {
 				coordinateBetweenXY = new Coordinate(coordinateFromX - i, coordinateFromY + i);
 				pieceBetween = board.getPieceAt(coordinateBetweenXY);
 				if (pieceBetween == null)
-					return true;
+					;
 				else
 					throw new InvalidMoveException();
 			}
+			return true;
 		}
 		return false;
 	}
