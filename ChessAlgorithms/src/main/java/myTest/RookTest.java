@@ -20,7 +20,7 @@ import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveExcep
 
 public class RookTest {
 
-	@Test
+	@Test (expected = InvalidMoveException.class)
 	public void shouldCheckMoveForRook() throws InvalidMoveException {
 
 
@@ -38,15 +38,11 @@ public class RookTest {
 		// then
 		assertEquals(true, r.checkMove(board, coordinateWhiteRook, new Coordinate(0, 7)));
 		assertEquals(true, r.checkMove(board, coordinateWhiteRook, new Coordinate(7, 0)));
-		assertEquals(false, r.checkMove(board, coordinateWhiteRook, new Coordinate(4, 1)));
-		assertEquals(false, r.checkMove(board, coordinateWhiteRook, new Coordinate(5, 3)));
-		assertEquals(false, r.checkMove(board, coordinateWhiteRook, new Coordinate(7, 7)));
-
 		assertEquals(true, r.checkMove(board, coordinateBlackRook, new Coordinate(3, 7)));
 		assertEquals(true, r.checkMove(board, coordinateBlackRook, new Coordinate(7, 4)));
-		assertEquals(false, r.checkMove(board, coordinateBlackRook, new Coordinate(0, 4)));
-		assertEquals(false, r.checkMove(board, coordinateBlackRook, new Coordinate(5, 3)));
-		assertEquals(false, r.checkMove(board, coordinateBlackRook, new Coordinate(0, 6)));
+		
+		assertEquals(false, r.checkMove(board, coordinateWhiteRook, new Coordinate(4, 1)));
+
 	}
 
 	@Test (expected = InvalidMoveException.class)
@@ -89,7 +85,7 @@ public class RookTest {
 		
 	}
 	
-	@Test
+	@Test (expected = InvalidMoveException.class)
 	public void shouldCheckMoveForRookOnChessboardCapture() throws InvalidMoveException {
 		
 		// given

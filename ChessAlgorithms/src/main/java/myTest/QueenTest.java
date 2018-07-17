@@ -7,14 +7,12 @@ import org.junit.Test;
 import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.generated.Board;
-import com.capgemini.chess.algorithms.implementation.Bishop;
-import com.capgemini.chess.algorithms.implementation.BoardManager;
 import com.capgemini.chess.algorithms.implementation.Queen;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 
 public class QueenTest {
 
-	@Test
+	@Test(expected = InvalidMoveException.class)
 	public void shouldCheckMoveForQueen() throws InvalidMoveException {
 
 		// given
@@ -31,15 +29,10 @@ public class QueenTest {
 		assertEquals(true, q.checkMove(board, coordinateWhiteBishop, new Coordinate(3, 6)));
 		assertEquals(true, q.checkMove(board, coordinateWhiteBishop, new Coordinate(6, 3)));
 		assertEquals(true, q.checkMove(board, coordinateWhiteBishop, new Coordinate(0, 0)));
-		assertEquals(false, q.checkMove(board, coordinateWhiteBishop, new Coordinate(4, 2)));
-		assertEquals(false, q.checkMove(board, coordinateWhiteBishop, new Coordinate(6, 4)));
-		assertEquals(false, q.checkMove(board, coordinateWhiteBishop, new Coordinate(7, 7)));
-
 		assertEquals(true, q.checkMove(board, coordinateBlackBishop, new Coordinate(5, 5)));
 		assertEquals(true, q.checkMove(board, coordinateBlackBishop, new Coordinate(3, 2)));
 		assertEquals(false, q.checkMove(board, coordinateBlackBishop, new Coordinate(2, 3)));
-		assertEquals(false, q.checkMove(board, coordinateBlackBishop, new Coordinate(5, 3)));
-		assertEquals(false, q.checkMove(board, coordinateBlackBishop, new Coordinate(0, 6)));
+
 	}
 
 	@Test(expected = InvalidMoveException.class)
@@ -123,7 +116,7 @@ public class QueenTest {
 		assertEquals(true, q.checkMove(board, new Coordinate(0, 2), new Coordinate(4, 6)));
 	}
 
-	@Test (expected = InvalidMoveException.class)
+	@Test(expected = InvalidMoveException.class)
 	public void shouldCheckMoveForQueenJumpOnChessboard() throws InvalidMoveException {
 
 		// given
@@ -163,8 +156,8 @@ public class QueenTest {
 		assertEquals(false, q.checkMove(board, coordinateWhiteQueen, new Coordinate(2, 2)));
 
 	}
-	
-	@Test (expected = InvalidMoveException.class)
+
+	@Test(expected = InvalidMoveException.class)
 	public void shouldCheckMoveForQueenJumpOnChessboardByWhite() throws InvalidMoveException {
 
 		// given
@@ -204,5 +197,5 @@ public class QueenTest {
 		assertEquals(false, q.checkMove(board, coordinateWhiteQueen, new Coordinate(4, 5)));
 
 	}
-	
+
 }

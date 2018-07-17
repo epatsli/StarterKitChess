@@ -1,8 +1,5 @@
 package com.capgemini.chess.algorithms.implementation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.generated.Board;
@@ -10,19 +7,21 @@ import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveExcep
 
 public class Bishop implements PiecesMove {
 
-	public boolean checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) throws InvalidMoveException {
+	public boolean checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo)
+			throws InvalidMoveException {
 
 		int coordinateFromX = coordinateFrom.getX();
 		int coordinateFromY = coordinateFrom.getY();
 		int coordinateToX = coordinateTo.getX();
 		int coordinateToY = coordinateTo.getY();
-		List<Coordinate> listMoveBishop = new ArrayList<>();
 
 		if ((Math.abs(coordinateToX - coordinateFromX) == Math.abs(coordinateToY - coordinateFromY))
-				&& checkFieldBetweenFromAndTo(board, coordinateFrom, coordinateTo)&& ((checkFieldToisEmpty(board, coordinateTo))
+				&& checkFieldBetweenFromAndTo(board, coordinateFrom, coordinateTo)
+				&& ((checkFieldToisEmpty(board, coordinateTo))
 						|| (checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo))))
 			return true;
-		return false;
+		else
+			throw new InvalidMoveException();
 	}
 
 	private boolean checkFieldBetweenFromAndTo(Board board, Coordinate coordinateFrom, Coordinate coordinateTo)
@@ -33,7 +32,6 @@ public class Bishop implements PiecesMove {
 		int coordinateToX = coordinateTo.getX();
 		int coordinateToY = coordinateTo.getY();
 
-		int differentCoordinateX = Math.abs(coordinateFromX - coordinateToX) - 1;
 		int differentCoordinateY = Math.abs(coordinateFromY - coordinateToY) - 1;
 
 		Piece pieceBetween;
@@ -84,7 +82,7 @@ public class Bishop implements PiecesMove {
 		}
 		return false;
 	}
-	
+
 	private boolean checkEqualColorPlayerFromAndTo(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) {
 
 		Piece piece1 = board.getPieceAt(coordinateFrom);

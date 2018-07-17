@@ -1,8 +1,5 @@
 package com.capgemini.chess.algorithms.implementation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.generated.Board;
@@ -26,8 +23,8 @@ public class Queen implements PiecesMove {
 				&& ((checkFieldToisEmpty(board, coordinateTo))
 						|| (checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo))))
 			return true;
-
-		return false;
+		else
+			throw new InvalidMoveException();
 	}
 
 	private boolean checkFieldBetweenFromAndToBishop(Board board, Coordinate coordinateFrom, Coordinate coordinateTo)
@@ -38,7 +35,6 @@ public class Queen implements PiecesMove {
 		int coordinateToX = coordinateTo.getX();
 		int coordinateToY = coordinateTo.getY();
 
-		int differentCoordinateX = Math.abs(coordinateFromX - coordinateToX);
 		int differentCoordinateY = Math.abs(coordinateFromY - coordinateToY);
 
 		Piece pieceBetween;

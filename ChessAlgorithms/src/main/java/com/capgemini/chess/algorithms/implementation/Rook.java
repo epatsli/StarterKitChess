@@ -28,7 +28,8 @@ public class Rook implements PiecesMove {
 				&& ((checkFieldToisEmpty(board, coordinateTo))
 						|| (checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo))))
 			return true;
-		return false;
+		else
+			throw new InvalidMoveException();
 	}
 
 	private boolean checkFieldBetweenFromAndTo(Board board, Coordinate coordinateFrom, Coordinate coordinateTo)

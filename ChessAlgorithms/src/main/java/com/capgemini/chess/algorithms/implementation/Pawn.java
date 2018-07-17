@@ -1,8 +1,5 @@
 package com.capgemini.chess.algorithms.implementation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.enums.Color;
 import com.capgemini.chess.algorithms.data.enums.Piece;
@@ -20,12 +17,13 @@ public class Pawn implements PiecesMove {
 		int coordinateFromY = coordinateFrom.getY();
 		int coordinateToY = coordinateTo.getY();
 
-		if ((Math.abs(coordinateFromY - coordinateToY) == 1) && (checkMoveJumpOne(board, coordinateFrom, coordinateTo))
+		if ((((Math.abs(coordinateFromY - coordinateToY) == 1) && (checkMoveJumpOne(board, coordinateFrom, coordinateTo)))
 				|| ((Math.abs(coordinateFromY - coordinateToY) == 2)
-						&& (checkMoveJumpTwo(board, coordinateFrom, coordinateTo))))
+						&& (checkMoveJumpTwo(board, coordinateFrom, coordinateTo))))&& ((checkFieldToisEmpty(board, coordinateTo))
+								|| (checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo))))
 			return true;
-		return false;
-
+		else
+			throw new InvalidMoveException();
 	}
 
 	private boolean checkMoveJumpOne(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) {
@@ -36,7 +34,6 @@ public class Pawn implements PiecesMove {
 		int coordinateToY = coordinateTo.getY();
 		Piece piece = board.getPieceAt(coordinateFrom);
 		CheckData check = new CheckData();
-		List<Coordinate> ListMovePawn = new ArrayList<>();
 
 		if ((check.checkFieldToisEmpty(board, coordinateTo)) && (piece.getColor() == Color.WHITE)) {
 			if ((coordinateToX - coordinateFromX == 0) && (coordinateToY - coordinateFromY == 1))
@@ -87,5 +84,23 @@ public class Pawn implements PiecesMove {
 		}
 		return false;
 	}
+	private boolean checkEqualColorPlayerFromAndTo(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) {
 
+		Piece piece1 = board.getPieceAt(coordinateFrom);
+		Piece piece2 = board.getPieceAt(coordinateTo);
+
+		if ((piece1.getColor()) != (piece2.getColor()))
+			return true;
+
+		return false;
+	}
+
+	private boolean checkFieldToisEmpty(Board board, Coordinate coordinateTo) {
+
+		Piece piece = board.getPieceAt(coordinateTo);
+		if (piece == null)
+			return true;
+
+		return false;
+	}
 }

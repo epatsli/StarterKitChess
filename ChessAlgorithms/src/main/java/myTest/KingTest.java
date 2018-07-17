@@ -7,38 +7,42 @@ import org.junit.Test;
 import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.generated.Board;
-import com.capgemini.chess.algorithms.implementation.Bishop;
+import com.capgemini.chess.algorithms.implementation.King;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 
-public class BishopTest {
+public class KingTest {
 
 	@Test(expected = InvalidMoveException.class)
-	public void shouldCheckMoveForBihop() throws InvalidMoveException {
+	public void shouldCheckMoveForKing() throws InvalidMoveException {
 
 		// given
-		Bishop b = new Bishop();
+		King k = new King();
 		Board board = new Board();
-		Coordinate coordinateWhiteBishop = new Coordinate(2, 0);
-		Coordinate coordinateBlackBishop = new Coordinate(5, 7);
+		Coordinate coordinateWhiteKing = new Coordinate(4, 0);
+		Coordinate coordinateBlackKing = new Coordinate(4, 7);
 
 		// when
-		board.setPieceAt(Piece.WHITE_BISHOP, coordinateWhiteBishop);
-		board.setPieceAt(Piece.BLACK_BISHOP, coordinateBlackBishop);
+		board.setPieceAt(Piece.WHITE_KING, coordinateWhiteKing);
+		board.setPieceAt(Piece.BLACK_KING, coordinateBlackKing);
 
 		// then
-		assertEquals(true, b.checkMove(board, coordinateWhiteBishop, new Coordinate(0, 2)));
-		assertEquals(true, b.checkMove(board, coordinateWhiteBishop, new Coordinate(5, 3)));
-		assertEquals(true, b.checkMove(board, coordinateBlackBishop, new Coordinate(7, 5)));
-		assertEquals(true, b.checkMove(board, coordinateBlackBishop, new Coordinate(0, 2)));
-		assertEquals(false, b.checkMove(board, coordinateWhiteBishop, new Coordinate(4, 1)));
+		assertEquals(true, k.checkMove(board, coordinateWhiteKing, new Coordinate(3, 0)));
+		assertEquals(true, k.checkMove(board, coordinateWhiteKing, new Coordinate(3, 1)));
+		assertEquals(true, k.checkMove(board, coordinateWhiteKing, new Coordinate(5, 1)));
+		assertEquals(true, k.checkMove(board, coordinateWhiteKing, new Coordinate(5, 0)));
+		assertEquals(true, k.checkMove(board, coordinateBlackKing, new Coordinate(3, 7)));
+		assertEquals(true, k.checkMove(board, coordinateBlackKing, new Coordinate(3, 6)));
+		assertEquals(true, k.checkMove(board, coordinateBlackKing, new Coordinate(4, 6)));
+		assertEquals(true, k.checkMove(board, coordinateBlackKing, new Coordinate(5, 6)));
+		assertEquals(false, k.checkMove(board, coordinateBlackKing, new Coordinate(4, 5)));
 
 	}
 
 	@Test(expected = InvalidMoveException.class)
-	public void shouldCheckMoveForBishopByPiece() throws InvalidMoveException {
+	public void shouldCheckMoveForKingByPiece() throws InvalidMoveException {
 
 		// given
-		Bishop b = new Bishop();
+		King k = new King();
 		Board board = new Board();
 
 		// when
@@ -65,20 +69,19 @@ public class BishopTest {
 		board.setPieceAt(Piece.WHITE_ROOK, new Coordinate(7, 0));
 
 		for (int x = 0; x < Board.SIZE; x++) {
-			board.setPieceAt(Piece.WHITE_PAWN, new Coordinate(x, 1));
+			board.setPieceAt(Piece.WHITE_PAWN, new Coordinate(5, 1));
 		}
 
 		// then
-		assertEquals(false, b.checkMove(board, new Coordinate(5, 0), new Coordinate(7, 2)));
+		assertEquals(false, k.checkMove(board, new Coordinate(3, 0), new Coordinate(3, 4)));
 
 	}
 
 	@Test
-	public void shouldCheckMoveForBihopOnChessboardCapture() throws InvalidMoveException {
+	public void shouldCheckMoveStepBack() throws InvalidMoveException {
 
 		// given
-		Bishop b = new Bishop();
-		Coordinate coordinateWhiteBishop = new Coordinate(3, 3);
+		King k = new King();
 		Board board = new Board();
 
 		// when
@@ -97,9 +100,9 @@ public class BishopTest {
 
 		board.setPieceAt(Piece.WHITE_ROOK, new Coordinate(0, 0));
 		board.setPieceAt(Piece.WHITE_KNIGHT, new Coordinate(1, 0));
-		board.setPieceAt(Piece.WHITE_BISHOP, coordinateWhiteBishop);
+		board.setPieceAt(Piece.WHITE_BISHOP, new Coordinate(2, 0));
 		board.setPieceAt(Piece.WHITE_QUEEN, new Coordinate(3, 0));
-		board.setPieceAt(Piece.WHITE_KING, new Coordinate(4, 0));
+		board.setPieceAt(Piece.WHITE_KING, new Coordinate(4, 4));
 		board.setPieceAt(Piece.WHITE_BISHOP, new Coordinate(5, 0));
 		board.setPieceAt(Piece.WHITE_KNIGHT, new Coordinate(6, 0));
 		board.setPieceAt(Piece.WHITE_ROOK, new Coordinate(7, 0));
@@ -109,18 +112,15 @@ public class BishopTest {
 		}
 
 		// then
-		assertEquals(true, b.checkMove(board, coordinateWhiteBishop, new Coordinate(5, 5)));
-		assertEquals(true, b.checkMove(board, new Coordinate(5, 5), new Coordinate(7, 3)));
-		board.setPieceAt(Piece.WHITE_BISHOP, new Coordinate(7, 3));
-		assertEquals(true, b.checkMove(board, new Coordinate(7, 3), new Coordinate(4, 6)));
+		assertEquals(true, k.checkMove(board, new Coordinate(4, 4), new Coordinate(4, 3)));
+
 	}
 
 	@Test(expected = InvalidMoveException.class)
-	public void shouldCheckMoveForBihopJumpOnChessboard() throws InvalidMoveException {
+	public void shouldCheckCapture() throws InvalidMoveException {
 
 		// given
-		Bishop b = new Bishop();
-		Coordinate coordinateWhiteBishop = new Coordinate(4, 3);
+		King k = new King();
 		Board board = new Board();
 
 		// when
@@ -129,7 +129,7 @@ public class BishopTest {
 		board.setPieceAt(Piece.BLACK_BISHOP, new Coordinate(2, 7));
 		board.setPieceAt(Piece.BLACK_QUEEN, new Coordinate(3, 7));
 		board.setPieceAt(Piece.BLACK_KING, new Coordinate(4, 7));
-		board.setPieceAt(Piece.BLACK_BISHOP, new Coordinate(5, 7));
+		board.setPieceAt(Piece.BLACK_BISHOP, new Coordinate(5, 3));
 		board.setPieceAt(Piece.BLACK_KNIGHT, new Coordinate(6, 7));
 		board.setPieceAt(Piece.BLACK_ROOK, new Coordinate(7, 7));
 
@@ -139,9 +139,9 @@ public class BishopTest {
 
 		board.setPieceAt(Piece.WHITE_ROOK, new Coordinate(0, 0));
 		board.setPieceAt(Piece.WHITE_KNIGHT, new Coordinate(1, 0));
-		board.setPieceAt(Piece.WHITE_BISHOP, coordinateWhiteBishop);
-		board.setPieceAt(Piece.WHITE_QUEEN, new Coordinate(3, 0));
-		board.setPieceAt(Piece.WHITE_KING, new Coordinate(4, 0));
+		board.setPieceAt(Piece.WHITE_BISHOP, new Coordinate(2, 0));
+		board.setPieceAt(Piece.WHITE_QUEEN, new Coordinate(3, 4));
+		board.setPieceAt(Piece.WHITE_KING, new Coordinate(4, 4));
 		board.setPieceAt(Piece.WHITE_BISHOP, new Coordinate(5, 0));
 		board.setPieceAt(Piece.WHITE_KNIGHT, new Coordinate(6, 0));
 		board.setPieceAt(Piece.WHITE_ROOK, new Coordinate(7, 0));
@@ -151,8 +151,8 @@ public class BishopTest {
 		}
 
 		// then
-		board.setPieceAt(Piece.BLACK_PAWN, new Coordinate(3, 4));
-		assertEquals(true, b.checkMove(board, coordinateWhiteBishop, new Coordinate(2, 5)));
-
+		assertEquals(true, k.checkMove(board, new Coordinate(4, 4), new Coordinate(5, 3)));
+		assertEquals(true, k.checkMove(board, new Coordinate(4, 4), new Coordinate(3, 4)));
 	}
+
 }
