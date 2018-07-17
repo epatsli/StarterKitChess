@@ -1,10 +1,6 @@
 package com.capgemini.chess.algorithms.implementation;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.capgemini.chess.algorithms.data.Coordinate;
-import com.capgemini.chess.algorithms.data.Move;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
@@ -19,14 +15,12 @@ public class Rook implements PiecesMove {
 		int coordinateFromY = coordinateFrom.getY();
 		int coordinateToX = coordinateTo.getX();
 		int coordinateToY = coordinateTo.getY();
-		Piece piece = board.getPieceAt(coordinateFrom);
-		CheckData check = new CheckData();
-		List<Coordinate> listMoveRook = new ArrayList<>();
+		CheckData valid=new CheckData();
 
 		if (((coordinateFromX == coordinateToX) || (coordinateFromY == coordinateToY))
 				&& (checkFieldBetweenFromAndTo(board, coordinateFrom, coordinateTo))
-				&& ((checkFieldToisEmpty(board, coordinateTo))
-						|| (checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo))))
+				&& ((valid.checkFieldToisEmpty(board, coordinateTo))
+						|| (valid.checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo))))
 			return true;
 		else
 			throw new InvalidMoveException();
@@ -93,26 +87,6 @@ public class Rook implements PiecesMove {
 				return true;
 			}
 		}
-		return false;
-	}
-
-	private boolean checkEqualColorPlayerFromAndTo(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) {
-
-		Piece piece1 = board.getPieceAt(coordinateFrom);
-		Piece piece2 = board.getPieceAt(coordinateTo);
-
-		if ((piece1.getColor()) != (piece2.getColor()))
-			return true;
-
-		return false;
-	}
-
-	private boolean checkFieldToisEmpty(Board board, Coordinate coordinateTo) {
-
-		Piece piece = board.getPieceAt(coordinateTo);
-		if (piece == null)
-			return true;
-
 		return false;
 	}
 }

@@ -15,13 +15,14 @@ public class Queen implements PiecesMove {
 		int coordinateFromY = coordinateFrom.getY();
 		int coordinateToX = coordinateTo.getX();
 		int coordinateToY = coordinateTo.getY();
+		CheckData valid=new CheckData();
 
 		if ((((Math.abs(coordinateToX - coordinateFromX) == Math.abs(coordinateToY - coordinateFromY))
 				&& checkFieldBetweenFromAndToBishop(board, coordinateFrom, coordinateTo))
 				|| (((coordinateFromX == coordinateToX) || (coordinateFromY == coordinateToY))
 						&& (checkFieldBetweenFromAndToRook(board, coordinateFrom, coordinateTo))))
-				&& ((checkFieldToisEmpty(board, coordinateTo))
-						|| (checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo))))
+				&& ((valid.checkFieldToisEmpty(board, coordinateTo))
+						|| (valid.checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo))))
 			return true;
 		else
 			throw new InvalidMoveException();
@@ -83,26 +84,6 @@ public class Queen implements PiecesMove {
 			}
 			return true;
 		}
-		return false;
-	}
-
-	private boolean checkEqualColorPlayerFromAndTo(Board board, Coordinate coordinateFrom, Coordinate coordinateTo) {
-
-		Piece piece1 = board.getPieceAt(coordinateFrom);
-		Piece piece2 = board.getPieceAt(coordinateTo);
-
-		if ((piece1.getColor()) != (piece2.getColor()))
-			return true;
-
-		return false;
-	}
-
-	private boolean checkFieldToisEmpty(Board board, Coordinate coordinateTo) {
-
-		Piece piece = board.getPieceAt(coordinateTo);
-		if (piece == null)
-			return true;
-
 		return false;
 	}
 

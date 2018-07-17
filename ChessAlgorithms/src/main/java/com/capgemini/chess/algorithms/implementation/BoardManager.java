@@ -1,5 +1,6 @@
 package com.capgemini.chess.algorithms.implementation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -236,9 +237,10 @@ public class BoardManager {
 
 	private Move validateMove(Coordinate from, Coordinate to) throws InvalidMoveException, KingInCheckException {
 		
-		CheckData check=new CheckData();
-		BoardManager boardManager=new BoardManager();
-		check.checkAllWarning(board, boardManager, from, to);
+		CheckData valid=new CheckData();
+		//List<Move> moves = new ArrayList<>();
+		BoardManager boardManager = new BoardManager();
+		valid.checkAllWarning(board, boardManager, from, to);
 		// TODO please add implementation here
 
 		return null;
