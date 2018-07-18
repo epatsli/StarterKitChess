@@ -1,7 +1,10 @@
 package com.capgemini.chess.algorithms.implementation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.Move;
@@ -13,7 +16,6 @@ import com.capgemini.chess.algorithms.data.enums.PieceType;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 import com.capgemini.chess.algorithms.implementation.exceptions.KingInCheckException;
-import com.capgemini.chess.algorithms.implementation.CheckData;
 /**
  * Class for managing of basic operations on the Chess Board.
  *
@@ -76,8 +78,9 @@ public class BoardManager {
 	 * Calculates state of the chess board.
 	 *
 	 * @return state of the chess board
+	 * @throws InvalidMoveException 
 	 */
-	public BoardState updateBoardState() {
+	public BoardState updateBoardState() throws InvalidMoveException {
 
 		Color nextMoveColor = calculateNextMoveColor();
 
@@ -235,55 +238,31 @@ public class BoardManager {
 	}
 
 	private Move validateMove(Coordinate from, Coordinate to) throws InvalidMoveException, KingInCheckException {
-		
+		/*
+		if (calculateNextMoveColor()==Color.WHITE) isKingInCheck(Color.WHITE);
+		else if (calculateNextMoveColor()==Color.BLACK) isKingInCheck(Color.BLACK);
+	*/	
 		CheckData valid=new CheckData();
 		if (!valid.checkAllWarning(board, this, from, to)) throw new InvalidMoveException();
-		
-		
 
 		// TODO please add implementation here
-		
-		PieceType pieceType=board.getPieceAt(from).getType();
-		
-		if (pieceType.equals(PieceType.BISHOP)) {
-			Bishop pieceBishop=new Bishop();
-			pieceBishop.checkMove(board, from, to);
-			
-		}
-		else if (pieceType.equals(PieceType.PAWN))
-		{
-			Pawn piecePawn=new Pawn();
-			piecePawn.checkMove(board, from, to);
 
-		}
-		else if (pieceType.equals(PieceType.KNIGHT))
-		{
-			Knight pieceKnight=new Knight();
-			pieceKnight.checkMove(board, from, to);
-		}
-		else if (pieceType.equals(PieceType.ROOK))
-		{
-			Rook pieceRook=new Rook();
-			pieceRook.checkMove(board, from, to);
-		}
-		else if (pieceType.equals(PieceType.QUEEN))
-		{
-			Queen pieceQueen=new Queen();
-			pieceQueen.checkMove(board, from, to);
-		}
-		else if (pieceType.equals(PieceType.KING))
-		{
-			King pieceKing=new King();
-			pieceKing.checkMove(board, from, to);
-		}
-		
+		checkPossibilityMove(from,to);
 		return settingType(from, to);
 	}
 
-	private boolean isKingInCheck(Color kingColor) {
+	private boolean isKingInCheck(Color kingColor) throws InvalidMoveException {
 
+		
 		// TODO please add implementation here
+
+		if ((kingColor==Color.WHITE) &&(checkWhiteKingInCheck(board)))
+			return true;
+		else if ((kingColor==Color.BLACK)&&(checkBlackKingInCheck(board)))
+			return true;
+		
 		return false;
+
 	}
 
 	private boolean isAnyMoveValid(Color nextMoveColor) {
@@ -361,4 +340,188 @@ public class BoardManager {
 		return move;
 	}
 
+	private List<Coordinate> listWhiteFiguresOnBoard(Board board) {
+
+		Piece piece;
+		int coordinateX = 0;
+		int coordinateY = 0;
+		Coordinate coordinate;
+		List<Coordinate> listWhitePiece = new ArrayList<Coordinate>();
+
+		for (int row = 0; row < Board.SIZE; row++) {
+			for (int column = 0; column < Board.SIZE; column++) {
+				coordinate = new Coordinate(coordinateX + row, coordinateY + column);
+				piece = board.getPieceAt(coordinate);
+				if ((piece != null) && (piece.getColor() == Color.WHITE))
+					listWhitePiece.add(coordinate);
+			}
+		}
+		return listWhitePiece;
+	}
+	
+	private List<Coordinate> listBlackFiguresOnBoard(Board board) {
+
+		Piece piece;
+		int coordinateX = 0;
+		int coordinateY = 0;
+		Coordinate coordinate;
+		List<Coordinate> listBlackPiece = new ArrayList<Coordinate>();
+
+		for (int row = 0; row < Board.SIZE; row++) {
+			for (int column = 0; column < Board.SIZE; column++) {
+				coordinate = new Coordinate(coordinateX + row, coordinateY + column);
+				piece = board.getPieceAt(coordinate);
+				if ((piece != null) && (piece.getColor() == Color.BLACK))
+					listBlackPiece.add(coordinate);
+			}
+		}
+		return listBlackPiece;
+	}
+	
+	private Set<Coordinate> allPossibleMoveForWhite(Board board) throws InvalidMoveException{
+
+		Set<Coordinate> setAllMoveWhite = new HashSet<>();
+		Coordinate coordinateFrom = new Coordinate(0, 0);
+		Coordinate coordinateTo;
+		int coordinateX = 0;
+		int coordinateY = 0;
+		
+		List<Coordinate> listWhitePiece=listWhiteFiguresOnBoard(board);
+		
+		for (int index = 0; index < listWhitePiece.size(); index++) {
+			coordinateFrom = listWhitePiece.get(index);
+			for (int row = 0; row < Board.SIZE; row++) {
+				for (int column = 0; column < Board.SIZE; column++) {
+					coordinateTo = new Coordinate(coordinateX+row, coordinateY+column);
+					try{
+					checkPossibilityMove(coordinateFrom,coordinateTo);
+					}
+					catch (InvalidMoveException e)
+					{
+						continue;
+					}
+						setAllMoveWhite.add(coordinateTo);
+				}
+			}
+		}
+		return setAllMoveWhite;
+	}
+	
+	private Set<Coordinate> allPossibleMoveForBlack(Board board)
+			throws InvalidMoveException {
+
+		Set<Coordinate> setAllMoveBlack = new HashSet<>();
+		Coordinate coordinateFrom = new Coordinate(0, 0);
+		Coordinate coordinateTo;
+		int coordinateX = 0;
+		int coordinateY = 0;
+		List<Coordinate> listBlackPiece=listBlackFiguresOnBoard(board);
+		
+		for (int index = 0; index < listBlackPiece.size(); index++) {
+			coordinateFrom = listBlackPiece.get(index);
+			for (int row = 0; row < Board.SIZE; row++) {
+				for (int column = 0; column < Board.SIZE; column++) {
+					coordinateTo = new Coordinate(coordinateX+row, coordinateY+column);	
+					try{
+					checkPossibilityMove(coordinateFrom,coordinateTo);
+					}
+					catch (InvalidMoveException e)
+					{
+						continue;
+					}
+					setAllMoveBlack.add(coordinateTo);
+				}
+			}
+		}
+		return setAllMoveBlack;
+	}	
+	
+	private Coordinate returnPositionWhiteKing(Board board) throws InvalidMoveException
+	{
+		Coordinate possitionWhiteKing=new Coordinate(0,0);
+		Coordinate helpPossitionWhiteKing;
+		int coordinateX=0;
+		int coordinateY=0;
+		Piece piece;
+		for (int row = 0; row < Board.SIZE; row++) {
+			for (int column = 0; column < Board.SIZE; column++) {
+				helpPossitionWhiteKing=new Coordinate(coordinateX+row, coordinateY+column);
+				piece=board.getPieceAt(helpPossitionWhiteKing);
+				if (piece.equals(Piece.WHITE_KING)) possitionWhiteKing=helpPossitionWhiteKing;
+			}
+		}
+		return possitionWhiteKing;
+	}
+	
+	private Coordinate returnPositionBlackKing(Board board) throws InvalidMoveException
+	{
+		Coordinate possitionBlackKing=new Coordinate(0,0);
+		Coordinate helpPossitionBlackKing;
+		int coordinateX=0;
+		int coordinateY=0;
+		Piece piece;
+		for (int row = 0; row < Board.SIZE; row++) {
+			for (int column = 0; column < Board.SIZE; column++) {
+				helpPossitionBlackKing=new Coordinate(coordinateX+row, coordinateY+column);
+				piece=board.getPieceAt(helpPossitionBlackKing);
+				if (piece==(Piece.BLACK_KING)) possitionBlackKing=helpPossitionBlackKing;
+			}
+		}
+		return possitionBlackKing;
+	}
+	
+	private boolean checkWhiteKingInCheck(Board board) throws InvalidMoveException
+	{
+		Coordinate possitionWhiteKing=returnPositionWhiteKing(board);
+		Set<Coordinate> setAllMoveBlack=allPossibleMoveForBlack(board);
+		if (setAllMoveBlack.contains(possitionWhiteKing)) return true;
+		return false;
+	}
+	
+	private boolean checkBlackKingInCheck(Board board) throws InvalidMoveException
+	{
+		Coordinate possitionBlackKing=returnPositionBlackKing(board);
+		Set<Coordinate> setAllMoveWhite=allPossibleMoveForWhite(board);
+		if (setAllMoveWhite.contains(possitionBlackKing)) return true;
+		return false;
+	}
+	
+	private void checkPossibilityMove(Coordinate from, Coordinate to) throws InvalidMoveException
+	{
+		PieceType pieceType=board.getPieceAt(from).getType();
+		
+		if (pieceType.equals(PieceType.BISHOP)) {
+			Bishop pieceBishop=new Bishop();
+			pieceBishop.checkMove(board, from, to);
+			
+		}
+		else if (pieceType.equals(PieceType.PAWN))
+		{
+			Pawn piecePawn=new Pawn();
+			piecePawn.checkMove(board, from, to);
+
+		}
+		else if (pieceType.equals(PieceType.KNIGHT))
+		{
+			Knight pieceKnight=new Knight();
+			pieceKnight.checkMove(board, from, to);
+		}
+		else if (pieceType.equals(PieceType.ROOK))
+		{
+			Rook pieceRook=new Rook();
+			pieceRook.checkMove(board, from, to);
+		}
+		else if (pieceType.equals(PieceType.QUEEN))
+		{
+			Queen pieceQueen=new Queen();
+			pieceQueen.checkMove(board, from, to);
+		}
+		else if (pieceType.equals(PieceType.KING))
+		{
+			King pieceKing=new King();
+			pieceKing.checkMove(board, from, to);
+		}
+	}
+	
+	
 }

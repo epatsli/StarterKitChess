@@ -1,7 +1,6 @@
 package com.capgemini.chess.algorithms.implementation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,20 +15,6 @@ public interface PiecesMove {
 
 	public boolean checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo)
 			throws InvalidMoveException;
-
-	default List<Coordinate> chessboardStatus(int[][] numberMoveOnChessboard) {
-
-		List<Coordinate> listPieceOnBoard = new ArrayList<>();
-		for (int row = 0; row < Board.SIZE; row++) {
-			for (int column = 0; column < Board.SIZE; column++)
-				if (numberMoveOnChessboard[row][column] != -1)
-					listPieceOnBoard.add(new Coordinate(row, column));
-		}
-		return listPieceOnBoard;
-		// zaimplementowac liste biezacych figur na planszy
-		// dla kazedj wspolrzednej zwraca czy znajduje sie tam jakis element
-		// wynik zapisuje do listy (wspolrzedna, puste/pelne)
-	}
 
 	default void figuresOnBoard(Board board) {
 
@@ -73,7 +58,7 @@ public interface PiecesMove {
 			}
 		}
 		
-		for (int index = 0; index < listWhitePiece.size(); index++) {
+		for (int index = 0; index < listBlackPiece.size(); index++) {
 			coordinateFrom = listBlackPiece.get(index);
 			for (int row = 0; row < Board.SIZE; row++) {
 				for (int column = 0; column < Board.SIZE; column++) {
