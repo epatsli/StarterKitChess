@@ -279,6 +279,7 @@ public class BoardManagerTest {
 		board.getMoveHistory().add(createDummyMove(board));
 		board.setPieceAt(Piece.WHITE_PAWN, new Coordinate(1, 4));
 		board.setPieceAt(Piece.BLACK_PAWN, new Coordinate(2, 6));
+		
 		boardManager.performMove(new Coordinate(2, 6), new Coordinate(2, 4));
 		
 		// when
@@ -287,6 +288,7 @@ public class BoardManagerTest {
 		// then
 		assertEquals(MoveType.EN_PASSANT, move.getType());
 		assertEquals(Piece.WHITE_PAWN, move.getMovedPiece());
+		
 	}
 	
 	@Test

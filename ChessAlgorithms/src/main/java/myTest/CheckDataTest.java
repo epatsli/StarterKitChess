@@ -14,12 +14,13 @@ import com.capgemini.chess.algorithms.data.Move;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.implementation.BoardManager;
 import com.capgemini.chess.algorithms.implementation.CheckData;
+import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 import com.capgemini.chess.algorithms.data.enums.*;
 
 public class CheckDataTest {
 
 	@Test
-	public void shouldCheckFieldFromIsInSize() {
+	public void shouldCheckFieldFromIsInSize() throws InvalidMoveException {
 
 		// given
 		CheckData FieldFrom = new CheckData();
@@ -34,7 +35,7 @@ public class CheckDataTest {
 		
 	}
 
-	@Test(expected = IndexOutOfBoundsException.class)
+	@Test(expected = InvalidMoveException.class)
 	public void shouldCheckFieldFromIsInSizeTrowsException() throws Exception {
 
 		// given
@@ -50,7 +51,7 @@ public class CheckDataTest {
 	}
 
 	@Test
-	public void shouldCheckFieldToIsInSize() {
+	public void shouldCheckFieldToIsInSize() throws InvalidMoveException {
 
 		// given
 		CheckData FieldFrom = new CheckData();
@@ -64,7 +65,7 @@ public class CheckDataTest {
 		assertEquals(true, FieldFrom.checkFieldToIsInSize(boardManager.getBoard(), c1));
 	}
 
-	@Test(expected = IndexOutOfBoundsException.class)
+	@Test(expected = InvalidMoveException.class)
 	public void shouldCheckFieldToIsInSizeTrowsException() throws Exception {
 
 		// given

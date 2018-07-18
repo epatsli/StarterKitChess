@@ -1,6 +1,5 @@
 package com.capgemini.chess.algorithms.implementation;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +13,7 @@ import com.capgemini.chess.algorithms.data.enums.PieceType;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 import com.capgemini.chess.algorithms.implementation.exceptions.KingInCheckException;
-
+import com.capgemini.chess.algorithms.implementation.CheckData;
 /**
  * Class for managing of basic operations on the Chess Board.
  *
@@ -24,7 +23,7 @@ import com.capgemini.chess.algorithms.implementation.exceptions.KingInCheckExcep
 public class BoardManager {
 
 	private Board board = new Board();
-	int[][] numberMoveOnChessboard = new int[Board.SIZE][Board.SIZE];// my
+//	int[][] numberMoveOnChessboard = new int[Board.SIZE][Board.SIZE];// my
 
 	public BoardManager() {
 		initBoard();
@@ -68,7 +67,7 @@ public class BoardManager {
 
 		addMove(move);
 		
-		changeNumberMadeMove(from, to);// my
+	//	changeNumberMadeMove(from, to);// my
 
 		return move;
 	}
@@ -238,12 +237,47 @@ public class BoardManager {
 	private Move validateMove(Coordinate from, Coordinate to) throws InvalidMoveException, KingInCheckException {
 		
 		CheckData valid=new CheckData();
-		//List<Move> moves = new ArrayList<>();
-		BoardManager boardManager = new BoardManager();
-		valid.checkAllWarning(board, boardManager, from, to);
-		// TODO please add implementation here
+		if (!valid.checkAllWarning(board, this, from, to)) throw new InvalidMoveException();
+		
+		
 
-		return null;
+		// TODO please add implementation here
+		
+		PieceType pieceType=board.getPieceAt(from).getType();
+		
+		if (pieceType.equals(PieceType.BISHOP)) {
+			Bishop pieceBishop=new Bishop();
+			pieceBishop.checkMove(board, from, to);
+			
+		}
+		else if (pieceType.equals(PieceType.PAWN))
+		{
+			Pawn piecePawn=new Pawn();
+			piecePawn.checkMove(board, from, to);
+
+		}
+		else if (pieceType.equals(PieceType.KNIGHT))
+		{
+			Knight pieceKnight=new Knight();
+			pieceKnight.checkMove(board, from, to);
+		}
+		else if (pieceType.equals(PieceType.ROOK))
+		{
+			Rook pieceRook=new Rook();
+			pieceRook.checkMove(board, from, to);
+		}
+		else if (pieceType.equals(PieceType.QUEEN))
+		{
+			Queen pieceQueen=new Queen();
+			pieceQueen.checkMove(board, from, to);
+		}
+		else if (pieceType.equals(PieceType.KING))
+		{
+			King pieceKing=new King();
+			pieceKing.checkMove(board, from, to);
+		}
+		
+		return settingType(from, to);
 	}
 
 	private boolean isKingInCheck(Color kingColor) {
@@ -280,7 +314,7 @@ public class BoardManager {
 
 		return lastNonAttackMoveIndex;
 	}
-
+/*
 	public int[][] numberMadeMove()// my
 	{
 		int size = Board.SIZE;
@@ -311,6 +345,20 @@ public class BoardManager {
 				System.out.print(this.numberMoveOnChessboard[row][column] + " ");
 			System.out.println();
 		}
+	}
+	*/
+	private Move settingType(Coordinate coordinateFrom, Coordinate coordinateTo)
+	{
+		CheckData valid=new CheckData();
+		
+		Piece piece=board.getPieceAt(coordinateFrom);
+		MoveType moveType = MoveType.ATTACK;
+		
+		if (valid.checkFieldToisEmpty(board, coordinateTo)) moveType=MoveType.ATTACK;
+		else if (valid.checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo)) moveType=MoveType.CAPTURE;
+			
+		Move move=new Move(coordinateFrom,coordinateTo,moveType,piece);
+		return move;
 	}
 
 }

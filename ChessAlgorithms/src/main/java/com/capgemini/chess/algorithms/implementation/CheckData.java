@@ -1,28 +1,27 @@
 package com.capgemini.chess.algorithms.implementation;
 
 import com.capgemini.chess.algorithms.data.Coordinate;
-import com.capgemini.chess.algorithms.data.Move;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.implementation.BoardManager;
+import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
 
 public class CheckData {
 
-	public CheckData() {
+	public boolean checkAllWarning(Board board, BoardManager boardManager, Coordinate coordinateFrom,
+			Coordinate coordinateTo) throws InvalidMoveException {
+		if ((checkFieldFromIsInSize(board, coordinateFrom))
+		&&(checkFieldToIsInSize(board, coordinateTo))
+		&&(checkFieldFromisNoEmpty(board, coordinateFrom))
+		&&(checkEqualsIsFieldFromAndFieldTo(coordinateFrom, coordinateTo))
+		&&(checkColorPlayerFrom(board, boardManager, coordinateFrom))
+		)
+		return true;
+		else
+		return false;
 	}
 
-	public void checkAllWarning(Board board, BoardManager boardManager, Coordinate coordinateFrom,
-			Coordinate coordinateTo) {
-		checkFieldFromIsInSize(board, coordinateFrom);
-		checkFieldToIsInSize(board, coordinateTo);
-		checkFieldFromisNoEmpty(board, coordinateFrom);
-		checkEqualsIsFieldFromAndFieldTo(coordinateFrom, coordinateTo);
-		checkColorPlayerFrom(board, boardManager, coordinateFrom);
-		checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo);
-		checkFieldToisEmpty(board, coordinateTo);
-	}
-
-	public boolean checkFieldFromIsInSize(Board board, Coordinate coordinateFrom) {
+	public boolean checkFieldFromIsInSize(Board board, Coordinate coordinateFrom) throws InvalidMoveException {
 
 		int coordinateX = coordinateFrom.getX();
 		int coordinateY = coordinateFrom.getY();
@@ -31,11 +30,11 @@ public class CheckData {
 		if ((coordinateX >= 0) && (coordinateX < size) && (coordinateY >= 0) && (coordinateY < size))
 			return true;
 		else {
-			throw new IndexOutOfBoundsException("Coordinate from is outside the scope");
+			throw new InvalidMoveException();
 		}
 	}
 
-	public boolean checkFieldToIsInSize(Board board, Coordinate coordinateTo) {
+	public boolean checkFieldToIsInSize(Board board, Coordinate coordinateTo) throws InvalidMoveException {
 
 		int coordinateX = coordinateTo.getX();
 		int coordinateY = coordinateTo.getY();
@@ -44,7 +43,7 @@ public class CheckData {
 		if ((coordinateX >= 0) && (coordinateX < size) && (coordinateY >= 0) && (coordinateY < size))
 			return true;
 		else {
-			throw new IndexOutOfBoundsException("Coordinate to is outside the scope");
+			throw new InvalidMoveException();
 		}
 	}
 
@@ -94,8 +93,5 @@ public class CheckData {
 			return true;
 
 		return false;
-
-		// if (!FieldToisEmpty) checkColorPlayerTo(coordinateFrom,
-		// coordinateTo);
 	}
 }

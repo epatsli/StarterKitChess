@@ -2,6 +2,7 @@ package com.capgemini.chess.algorithms.data;
 
 import com.capgemini.chess.algorithms.data.enums.MoveType;
 import com.capgemini.chess.algorithms.data.enums.Piece;
+import com.capgemini.chess.algorithms.data.enums.PieceType;
 
 /**
  * Chess move definition.
@@ -16,6 +17,16 @@ public class Move {
 	private MoveType type;
 	private Piece movedPiece;
 
+	public Move(){};
+	
+	public Move (Coordinate from, Coordinate to, MoveType type,Piece movedPiece)
+	{
+		this.from=from;
+		this.to=to;
+		this.type=type;
+		this.movedPiece=movedPiece;
+	}
+	
 	public Coordinate getFrom() {
 		return from;
 	}

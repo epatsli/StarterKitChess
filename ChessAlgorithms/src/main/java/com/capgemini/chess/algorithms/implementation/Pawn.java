@@ -8,9 +8,6 @@ import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveExcep
 
 public class Pawn implements PiecesMove {
 
-	public Pawn() {
-	}
-
 	public boolean checkMove(Board board, Coordinate coordinateFrom, Coordinate coordinateTo)
 			throws InvalidMoveException {
 
