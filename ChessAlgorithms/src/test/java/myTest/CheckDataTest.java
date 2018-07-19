@@ -1,8 +1,7 @@
 package myTest;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertFalse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,11 +10,9 @@ import org.junit.Test;
 
 import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.Move;
-import com.capgemini.chess.algorithms.data.generated.Board;
 import com.capgemini.chess.algorithms.implementation.BoardManager;
 import com.capgemini.chess.algorithms.implementation.CheckData;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
-import com.capgemini.chess.algorithms.data.enums.*;
 
 public class CheckDataTest {
 
@@ -31,23 +28,25 @@ public class CheckDataTest {
 		BoardManager boardManager = new BoardManager(moves);
 
 		// then
-		assertEquals(true, FieldFrom.checkFieldFromIsInSize(boardManager.getBoard(), c1));
-		
+		assertEquals(true, FieldFrom.checkFieldIsInSize(boardManager.getBoard(), c1));
+
 	}
 
-	@Test(expected = InvalidMoveException.class)
-	public void shouldCheckFieldFromIsInSizeTrowsException() throws Exception {
+	@Test
+	public void shouldCheckFieldIsInSizeTrowsException() {
 
 		// given
-		CheckData FieldFrom = new CheckData();
+		CheckData fieldFrom = new CheckData();
 		Coordinate c1 = new Coordinate(0, 8);
 		List<Move> moves = new ArrayList<>();
 
 		// when
 		BoardManager boardManager = new BoardManager(moves);
+		boolean result = fieldFrom.checkFieldIsInSize(boardManager.getBoard(), c1);
 
 		// then
-		FieldFrom.checkFieldFromIsInSize(boardManager.getBoard(), c1);
+		assertFalse(result);
+
 	}
 
 	@Test
@@ -62,22 +61,7 @@ public class CheckDataTest {
 		BoardManager boardManager = new BoardManager(moves);
 
 		// then
-		assertEquals(true, FieldFrom.checkFieldToIsInSize(boardManager.getBoard(), c1));
-	}
-
-	@Test(expected = InvalidMoveException.class)
-	public void shouldCheckFieldToIsInSizeTrowsException() throws Exception {
-
-		// given
-		CheckData FieldFrom = new CheckData();
-		Coordinate c1 = new Coordinate(-2, 4);
-		List<Move> moves = new ArrayList<>();
-
-		// when
-		BoardManager boardManager = new BoardManager(moves);
-
-		// then
-		FieldFrom.checkFieldToIsInSize(boardManager.getBoard(), c1);
+		assertEquals(true, FieldFrom.checkFieldIsInSize(boardManager.getBoard(), c1));
 	}
 
 	@Test

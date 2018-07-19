@@ -3,48 +3,32 @@ package com.capgemini.chess.algorithms.implementation;
 import com.capgemini.chess.algorithms.data.Coordinate;
 import com.capgemini.chess.algorithms.data.enums.Piece;
 import com.capgemini.chess.algorithms.data.generated.Board;
-import com.capgemini.chess.algorithms.implementation.BoardManager;
 import com.capgemini.chess.algorithms.implementation.exceptions.InvalidMoveException;
+import com.capgemini.chess.algorithms.implementation.exceptions.MoveOutOfBoundException;
 
 public class CheckData {
 
-	public boolean checkAllWarning(Board board, BoardManager boardManager, Coordinate coordinateFrom,
+	public void checkAllWarning(Board board, BoardManager boardManager, Coordinate coordinateFrom,
 			Coordinate coordinateTo) throws InvalidMoveException {
-		if ((checkFieldFromIsInSize(board, coordinateFrom))
-		&&(checkFieldToIsInSize(board, coordinateTo))
-		&&(checkFieldFromisNoEmpty(board, coordinateFrom))
-		&&(checkEqualsIsFieldFromAndFieldTo(coordinateFrom, coordinateTo))
-		&&(checkColorPlayerFrom(board, boardManager, coordinateFrom))
-		)
-		return true;
-		else
+		if (!checkFieldIsInSize(board, coordinateFrom))
+			throw new MoveOutOfBoundException();
+		if (!checkFieldFromisNoEmpty(board, coordinateFrom))
+			throw new InvalidMoveException();
+		checkEqualsIsFieldFromAndFieldTo(coordinateFrom, coordinateTo);
+		if (!checkColorPlayerFrom(board, boardManager, coordinateFrom))
+			throw new InvalidMoveException();
+	}
+
+	public boolean checkFieldIsInSize(Board board, Coordinate coordinate) {
+
+		int coordinateX = coordinate.getX();
+		int coordinateY = coordinate.getY();
+		int size = Board.SIZE;
+
+		if ((coordinateX >= 0) && (coordinateX < size) && (coordinateY >= 0) && (coordinateY < size))
+			return true;
 		return false;
-	}
 
-	public boolean checkFieldFromIsInSize(Board board, Coordinate coordinateFrom) throws InvalidMoveException {
-
-		int coordinateX = coordinateFrom.getX();
-		int coordinateY = coordinateFrom.getY();
-		int size = Board.SIZE;
-
-		if ((coordinateX >= 0) && (coordinateX < size) && (coordinateY >= 0) && (coordinateY < size))
-			return true;
-		else {
-			throw new InvalidMoveException();
-		}
-	}
-
-	public boolean checkFieldToIsInSize(Board board, Coordinate coordinateTo) throws InvalidMoveException {
-
-		int coordinateX = coordinateTo.getX();
-		int coordinateY = coordinateTo.getY();
-		int size = Board.SIZE;
-
-		if ((coordinateX >= 0) && (coordinateX < size) && (coordinateY >= 0) && (coordinateY < size))
-			return true;
-		else {
-			throw new InvalidMoveException();
-		}
 	}
 
 	public boolean checkFieldFromisNoEmpty(Board board, Coordinate coordinateFrom) {

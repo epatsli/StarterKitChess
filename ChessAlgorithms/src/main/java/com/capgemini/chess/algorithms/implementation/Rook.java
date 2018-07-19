@@ -15,14 +15,14 @@ public class Rook implements PiecesMove {
 		int coordinateFromY = coordinateFrom.getY();
 		int coordinateToX = coordinateTo.getX();
 		int coordinateToY = coordinateTo.getY();
-		CheckData valid=new CheckData();
+		CheckData valid = new CheckData();
 
 		if (((coordinateFromX == coordinateToX) || (coordinateFromY == coordinateToY))
 				&& (checkFieldBetweenFromAndTo(board, coordinateFrom, coordinateTo))
 				&& ((valid.checkFieldToisEmpty(board, coordinateTo))
-						|| (valid.checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo))))
+						|| (valid.checkEqualColorPlayerFromAndTo(board, coordinateFrom, coordinateTo)))) {
 			return true;
-		else
+		} else
 			throw new InvalidMoveException();
 	}
 
