@@ -68,6 +68,11 @@ public class BoardManager {
 
 		addMove(move);
 
+		List<Move> moveHistory = board.getMoveHistory();
+		Piece piece = board.getPieceAt(to);
+		if (isKingInCheck(piece.getColor()))
+			throw new KingInCheckException();
+		moveHistory.remove(moveHistory.get(moveHistory.size() - 1));
 		return move;
 	}
 
@@ -239,6 +244,7 @@ public class BoardManager {
 		CheckData valid = new CheckData();
 		valid.checkAllWarning(board, this, from, to);
 		checkPossibilityMove(from, to);
+
 		return settingType(from, to);
 	}
 
@@ -263,7 +269,7 @@ public class BoardManager {
 		return false;
 	}
 
-	public Color calculateNextMoveColor() {// change with private
+	public Color calculateNextMoveColor() {
 		if (this.board.getMoveHistory().size() % 2 == 0) {
 			return Color.WHITE;
 		} else {
@@ -285,7 +291,7 @@ public class BoardManager {
 		return lastNonAttackMoveIndex;
 	}
 
-	private void isCheckAfterMyMove(Coordinate coordinateFrom) {
+	private void isCheckAfterMyMove(Coordinate coordinateFrom) throws InvalidMoveException {
 
 		Piece piece = board.getPieceAt(coordinateFrom);
 		Color playerColor = piece.getColor();
@@ -296,9 +302,9 @@ public class BoardManager {
 			afterMoveBlackKingIsInCheck();
 	}
 
-	private boolean afterMoveBlackKingIsInCheck() {
+	private boolean afterMoveBlackKingIsInCheck() throws InvalidMoveException {
 		Coordinate coordinate = board.returnPositionBlackKing();
-		Set<Coordinate> setAllMoveWhite = allPossibleMoveForWhite(board);
+		Set<Coordinate> setAllMoveWhite = allPossibleMove(board, Color.WHITE);
 
 		if (setAllMoveWhite.contains(coordinate))
 			throw new InvalidMoveException();
@@ -306,9 +312,9 @@ public class BoardManager {
 		return false;
 	}
 
-	private boolean afterMoveWhiteKingIsInCheck() {
+	private boolean afterMoveWhiteKingIsInCheck() throws InvalidMoveException {
 		Coordinate coordinate = board.returnPositionWhiteKing();
-		Set<Coordinate> setAllMoveBlack = allPossibleMoveForBlack(board);
+		Set<Coordinate> setAllMoveBlack = allPossibleMove(board, Color.BLACK);
 
 		if (setAllMoveBlack.contains(coordinate))
 			throw new InvalidMoveException();
@@ -331,33 +337,31 @@ public class BoardManager {
 		return move;
 	}
 
-	private Set<Coordinate> allPossibleMoveForWhite(Board board) {
+	private Set<Coordinate> allPossibleMove(Board board, Color color) {
 
-		Set<Coordinate> setAllMoveWhite = new HashSet<>();
+		Set<Coordinate> setAllMove = new HashSet<>();
 		Coordinate coordinateFrom = new Coordinate(0, 0);
 		Coordinate coordinateTo;
-		int coordinateX = 0;
-		int coordinateY = 0;
 
-		List<Coordinate> listWhitePiece = board.listWhiteFiguresOnBoard();
+		List<Coordinate> listPiece = board.listFiguresOnBoard(color);
 
-		for (int index = 0; index < listWhitePiece.size(); index++) {
-			coordinateFrom = listWhitePiece.get(index);
+		for (int index = 0; index < listPiece.size(); index++) {
+			coordinateFrom = listPiece.get(index);
 
 			for (int row = 0; row < Board.SIZE; row++) {
 				for (int column = 0; column < Board.SIZE; column++) {
-					coordinateTo = new Coordinate(coordinateX + row, coordinateY + column);
+					coordinateTo = new Coordinate(row, column);
 					try {
 						checkPossibilityMove(coordinateFrom, coordinateTo);
 					} catch (InvalidMoveException e) {
 						continue;
 					}
-					setAllMoveWhite.add(coordinateTo);
+					setAllMove.add(coordinateTo);
 				}
 			}
 		}
 
-		return setAllMoveWhite;
+		return setAllMove;
 	}
 
 	private boolean areAnyPossibleMoveWhite() {
@@ -372,14 +376,14 @@ public class BoardManager {
 
 	private Set<Coordinate> possibleMoveWhenWhiteKingIsInCheck() {
 
-		Set<Coordinate> setAllMoveWhite = allPossibleMoveForWhite(board);
-		Set<Coordinate> setAllMoveBlack = allPossibleMoveForBlack(board);
+		Set<Coordinate> setAllMoveWhite = allPossibleMove(board, Color.WHITE);
+		Set<Coordinate> setAllMoveBlack = allPossibleMove(board, Color.BLACK);
 		Set<Coordinate> possibleMoveInCheck = new HashSet<>();
-		for (Coordinate iterator : setAllMoveWhite) {
-			if (setAllMoveBlack.contains(iterator))
-				;
+		for (Coordinate item : setAllMoveWhite) {
+			if (setAllMoveBlack.contains(item))
+				continue;
 			else {
-				possibleMoveInCheck.add(iterator);
+				possibleMoveInCheck.add(item);
 			}
 		}
 
@@ -388,16 +392,17 @@ public class BoardManager {
 
 	private Set<Coordinate> possibleMoveWhenBlackKingIsInCheck() {
 
-		Set<Coordinate> setAllMoveWhite = allPossibleMoveForWhite(board);
-		Set<Coordinate> setAllMoveBlack = allPossibleMoveForBlack(board);
+		Set<Coordinate> setAllMoveWhite = allPossibleMove(board, Color.WHITE);
+		Set<Coordinate> setAllMoveBlack = allPossibleMove(board, Color.BLACK);
 		Set<Coordinate> possibleMoveInCheck = new HashSet<>();
-		for (Coordinate iterator : setAllMoveBlack) {
-			if (setAllMoveWhite.contains(iterator))
-				;
+		for (Coordinate item : setAllMoveBlack) {
+			if (setAllMoveWhite.contains(item))
+				continue;
 			else {
-				possibleMoveInCheck.add(iterator);
+				possibleMoveInCheck.add(item);
 			}
 		}
+
 		return possibleMoveInCheck;
 	}
 
@@ -411,34 +416,9 @@ public class BoardManager {
 			return true;
 	}
 
-	private Set<Coordinate> allPossibleMoveForBlack(Board board) {
-
-		Set<Coordinate> setAllMoveBlack = new HashSet<>();
-		Coordinate coordinateFrom = new Coordinate(0, 0);
-		Coordinate coordinateTo;
-		List<Coordinate> listBlackPiece = board.listBlackFiguresOnBoard();
-
-		for (int index = 0; index < listBlackPiece.size(); index++) {
-			coordinateFrom = listBlackPiece.get(index);
-			for (int row = 0; row < Board.SIZE; row++) {
-				for (int column = 0; column < Board.SIZE; column++) {
-					coordinateTo = new Coordinate(row, column);
-					try {
-						checkPossibilityMove(coordinateFrom, coordinateTo);
-					} catch (InvalidMoveException e) {
-						continue;
-					}
-					setAllMoveBlack.add(coordinateTo);
-				}
-			}
-		}
-
-		return setAllMoveBlack;
-	}
-
 	private boolean checkWhiteKingInCheck(Board board) {
 		Coordinate possitionWhiteKing = board.returnPositionWhiteKing();
-		Set<Coordinate> setAllMoveBlack = allPossibleMoveForBlack(board);
+		Set<Coordinate> setAllMoveBlack = allPossibleMove(board, Color.BLACK);
 		if (setAllMoveBlack.contains(possitionWhiteKing))
 			return true;
 		return false;
@@ -446,7 +426,7 @@ public class BoardManager {
 
 	private boolean checkBlackKingInCheck(Board board) {
 		Coordinate possitionBlackKing = board.returnPositionBlackKing();
-		Set<Coordinate> setAllMoveWhite = allPossibleMoveForWhite(board);
+		Set<Coordinate> setAllMoveWhite = allPossibleMove(board, Color.WHITE);
 		if (setAllMoveWhite.contains(possitionBlackKing))
 			return true;
 		return false;

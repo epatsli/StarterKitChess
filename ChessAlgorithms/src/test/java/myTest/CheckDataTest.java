@@ -33,7 +33,7 @@ public class CheckDataTest {
 	}
 
 	@Test
-	public void shouldCheckFieldIsInSizeTrowsException() {
+	public void shouldCheckFieldIsInSize() {
 
 		// given
 		CheckData fieldFrom = new CheckData();

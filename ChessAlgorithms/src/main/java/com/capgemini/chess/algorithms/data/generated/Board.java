@@ -67,38 +67,22 @@ public class Board {
 		return pieces[coordinate.getX()][coordinate.getY()];
 	}
 
-	public List<Coordinate> listWhiteFiguresOnBoard() {
+	public List<Coordinate> listFiguresOnBoard(Color color) {
 
 		Piece piece;
+
 		Coordinate coordinate;
-		List<Coordinate> listWhitePiece = new ArrayList<Coordinate>();
+		List<Coordinate> listPiece = new ArrayList<Coordinate>();
 
 		for (int row = 0; row < Board.SIZE; row++) {
 			for (int column = 0; column < Board.SIZE; column++) {
 				coordinate = new Coordinate(row, column);
 				piece = getPieceAt(coordinate);
-				if ((piece != null) && (piece.getColor() == Color.WHITE))
-					listWhitePiece.add(coordinate);
+				if ((piece != null) && (piece.getColor() == color))
+					listPiece.add(coordinate);
 			}
 		}
-		return listWhitePiece;
-	}
-
-	public List<Coordinate> listBlackFiguresOnBoard() {
-
-		Piece piece;
-		Coordinate coordinate;
-		List<Coordinate> listBlackPiece = new ArrayList<Coordinate>();
-
-		for (int row = 0; row < Board.SIZE; row++) {
-			for (int column = 0; column < Board.SIZE; column++) {
-				coordinate = new Coordinate(row, column);
-				piece = getPieceAt(coordinate);
-				if ((piece != null) && (piece.getColor() == Color.BLACK))
-					listBlackPiece.add(coordinate);
-			}
-		}
-		return listBlackPiece;
+		return listPiece;
 	}
 
 	public Coordinate returnPositionWhiteKing() {
